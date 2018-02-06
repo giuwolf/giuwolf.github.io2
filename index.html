@@ -1,12 +1,194 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Meu novo website</title>
-</head>
-<body>
-	<div>
-		<h1>Olá Mundo!</h1>
-	</div>
-</body>
+<html lang="en" ng-app="sknApp">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>Sock Knitter's Notebook</title>
+
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/app.css">
+        <!--- include angular.js in head for proper ng-cloak -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+        <!---<script src="bower_components/angular-route/angular-route.js"></script>-->
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="container">
+            <header>
+            <a href="http://99tricots.com" target="_blank">
+                <img src="images/99tricotslogo.png" alt="99Tricots">
+            </a>
+            </header>
+            <div id="calculator" ng-controller="StitchCalc" class="row {{constrDir}} {{heelType}}">
+                <div id="survey" class="col-md-6">
+                <h1>Construa sua própria receita de meia</h1>
+                <p>Aqui você vai aprender a fazer sua própria meia, toda personaliazada! Preencha com as informações necessárias, escolha o método de tricotá-la e faça meias de todos os tamanhos, com qualquer tipo de fio, para todos que você conhece! :D </p>
+                <p>Quando colocar a informação nas caixas abaixo, não atualize ou feche a página, pois a informação será perdida e você terá que inserir todas as informações novamente.</p>
+                <h3>Amostra e tamanho do pé</h3>
+                <form name="calc-sts">
+                    <p>
+                        <label>Pontos por polegada (1 polegada = 2,5 cm): 
+                        </label>
+                            <input type="text" ng-model="stsPerIn"></input>
+                    </p>
+                    <p>
+                        <label>Circunferência do pé em polegadas:  
+                        </label>
+                            <input type="text" ng-model="circumference"></input>
+                    </p>
+                    <p>
+                        <label>Tamanho do pé em polegadas: 
+                        </label>
+                            <input type="text" ng-model="length"></input>
+                    </p>
+                </form>
+
+                <h3>Escolha por onde começar</h3>
+
+                <p><strong>De que parte da meia você quer começar o trabalho?</strong></p>
+                <form>
+                    
+                    <p><input type="radio" name="constrDir" value="cuffDown" ng-model="constrDir"> Da barra para baixo</input></p>
+                </form>
+                
+                <div id="heel-choice" class="hide {{constrDir}}">
+                    <!--- only show for cuff down -->
+                    <p><strong>Que tipo de calcanhar você quer fazer?</strong></p>
+                    <form>
+                        <p><input type="radio" name="heelType" value="flap" class="top-down-heel" ng-model="heelType"> Sola reta com reforço </input></p>
+                        
+                    </form>
+                </div><!---#heel-choice-->
+            </div><!---#survey-->
+            <div id="recipe" class="col-md-6">
+                <h3 id="look-here">Sua receita de meia aparecerá aqui.</h2>
+                <div class="hide" id="shared-recipe">
+                    <h2>Receita de meia</h2>
+                    <p>Essas instruções são escritas para trabalhar com o loop mágico ou com duas agulhas circulares, e por isso temos abaixo a primeira agulha e a segunda agulha. Caso você prefira usar agulhas de duas pontas, considere "primeira agulha" como a primeira e a segunda agulha de duas pontas e a "segunda agulha" como a terceira e quarta agulha de duas pontas. </p>
+                    <h3>Abreviaturas</h3>
+                    <p class="abbrList">m = meia<br />
+                    t = tricô<br />
+                    des = deslize (sempre como se fosse fazer um tricô, a menos que esteja especificado para fazer diferente)<br />
+                    <span class="shortRowAbbr">cfa = com fio atrás<br />
+                        cff = com fio pela frente<br /></span>
+                    <span class="flapAbbr">2tj = 2 pontos juntos em tricô<br />
+                        ddm = <a href="https://www.lionbrand.com/faq/80.html?language=" target="_blank">desliza, desliza, meia</a><br /></span>
+                    <span class="shortRowAbbr">w&amp;t = <a href="http://www.purlsoho.com/create/2008/06/18/short-rows/" target="_blank">amarra e vira </a><br /></span>
+                    <span class="toeUpAbbr">RLI = <a href="http://www.twistcollective.com/collection/component/content/article/92-how-to/1047-lifted-increase-lli-rli" target="_blank">aumento pela direita</a><br />
+                        LLI = <a href="http://www.twistcollective.com/collection/component/content/article/92-how-to/1047-lifted-increase-lli-rli" target="_blank">aumento pela esquerta</a><br /></span>
+                    LD = lado direito<br />LA = lado avesso<br />
+                    IV = início da volta</p>
+                    <p class="toeUpAbbr">Fique à vontade para substituir os métodos de aumento que eu sugiro aqui.</p>
+                </div><!---#shared-recipe-->
+
+                <div class="hide" id="cuff-down-recipe">
+                    <h3>Barra e perna</h3>
+                    <p>Coloque {{saveNeedSts(stsPerIn, circumference, 4)}} pontos na agulha, sem apertar muito ou com um método elástico. Comece a trabalhar em círculo, com cuidado para não torcer.</p>
+                    <p>Volta 1: [2m, 2t] a volta toda<br />
+                    Repita a volta 1 até que o trabalho meça 2,5cm ou o tamanho desejado. </p>
+                    <p>Tricote em todas as voltas até que o trabalho meça {{legLength(heelType)}} polegadas, ou até o tamanho desejado</p>
+                    <h3>Calcanhar</h3>
+                    <div class="hide" id="flapInstructions">
+                        <h4>Calcanhar reto</h4>
+                        <p>Esse tipo de calcanhar usa o ponto eye of the partridge (<a href="http://www.haveayarn.ca/stitch/03_2009_stitch_of_the_month.htm" target="_blank">veja como fazer aqui</a>): Você pode substituir por qualquer outro ponto, contanto que o tamanho seja o mesmo no final.</p>
+                        <p>A sola da meia é trabalhada de maneira real pelos próximos {{saveNeedSts(stsPerIn, circumference, 4) / 2}} pontos.</p>
+                        <p>Carreira 1 (lado certo): 3t, *1m, desl 1; repita do * até os últimos 3 pontos, 3m.<br /> 
+                        Carreira 2 (lado avesso): 3m, t até o fim da carreira. <br />
+                        Carreira 3 (lado certo): 3t, *desl 1, 1m; repita do * até os últimos 3 pontos, 3m. <br />
+                        Carreira 4 (lado avesso): 3m, t até o fim da carreira. <br />
+                        </p>
+                        <p>Repita as 4 carreiras {{(saveNeedSts(stsPerIn, circumference, 4) / 8) - 1 | number:0 }} outras vezes, ou até que essa parte da sola alcance o tamanho desejado, terminando com o lado certo, na terceira carreira da sequência. </p>
+
+                        <h4>Virando o calcanhar</h4>
+                        <p>Carreira 1 (lado avesso): p{{(saveNeedSts(stsPerIn, circumference, 4) / 4) + 2}}, 2tj, 1t, vira<br />
+                        Carreira 2 (lado certo): desl 1, 5m, desl desl meia, 1m, vira<br />
+                        Carreira 3 (lado avesso): desl 1 cff, t até um ponto antes do espaço, 2tj, 1t, vira<br />
+                        Carreira 4 (lado certo): deal 1 cfa, m até um ponto antes do espaço, desl desl meia, 1m, vira</p>
+                        <p>Repita as carreiras 3 e 4 até que todos os espaços tenham sido fechados e todos os pontos trabalhados, terminando com uma carreira do lado certo. As últimas repetições das carreiras 3 e 4 não vão ter o úlimo "1m" e "1t", respectivamente.</p>
+
+                        <h4>Volte a trabalhar em círculo</h4>
+                        <p>Seu calcanhar terminou em uma carreira do lado certo. Continue trabalhando essa carreira da seguinte maneira:
+                        <p>
+                        Levante e tricote cada ponto da borda ao longo do primeiro lado da aba do calcanhar 
+                        <br />
+                        Coloque um marcador<br />
+                        Tricote ao longo da meia no peito do pé (pontos que você não trabalhou ainda)<br />
+                        Coloque um marcador<br />
+                        Levante e tricote cada ponto da borda ao longo da segunda aba do calcanhar 
+                        <br />
+                        Continue trabalhando em meia, e coloque um marcador no meio dos pontos do calcanhar, para marcar o início da volta, se desejar. 
+                    </p>
+                        <p>Agora você já retornou todos os pontos para as suas agulhas e está pronta para continuar a trabalhar em círculo.</p>
+                        <h4>Reforço</h4>
+                        <p>Volta 1: m até 3 pontos antes do marcador, 2mj, 1m, m até o próximo marcador, 1m, desl desl meia, m até o início da volta<br />
+                        Volta 2: m em toda a volta</p> 
+                        <p>Repita as vltas 1 e 2 até que o número de pontos tenha retornado para {{saveNeedSts(stsPerIn, circumference, 4)}}.</p>
+                        <p>Veja cuidadosamente qual metade dos pontos é do calcanhar e qual é do peito do pé. Você precisará dessa informação mais adiante para fazer a ponta dos pés.</p>
+                    </div><!---#flapInstructions-->
+                
+                        <h3>Pé</h3>
+                        <p>Trabalhe em meia até que o trabalho tenha {{length - 2}} polegadas.</p>
+
+                        <h3>Dedos</h3>
+                        <p>Tabalhe em meia até o começo dos pontos do peito do pé. Em seguida, comece a diminuição conforme as instruções abaixo:</p>
+                        <p>Carreira 1, peito do pé/agulha 1: 1m, desl desl meia, m até os últimos 3 pontos da agulha, 2mj, 1m <br />
+                        Carreira 1, sola/agulha 2: 1m, desl desl meia, m até os últimos 3 pontos da agulha, 2mj, 1m. <br />
+                        Volta 2: trabalhe em meia por toda a volta</p>
+                        <p>Repita as carreiras 1  e 2 até que restem apenas {{saveNeedSts(stsPerIn, circumference, 4) / 2 | floorMult:4}} pontos sobrando. Em seguida, repita a carreira 1 mais duas vezes. </p>
+                        <p>Ao final da diminuição, você deve ter {{(saveNeedSts(stsPerIn, circumference, 4) / 2) - 8 | floorMult:4}} pontos na sua agulha, {{((saveNeedSts(stsPerIn, circumference, 4) / 2) - 8) / 2 | floorMult:2}} pontos no peito do pé e {{((saveNeedSts(stsPerIn, circumference, 4) / 2) - 8) / 2 | floorMult:2}} pontos na sola.</p>
+                        <p>Corte o fio, deixando um pedaço de 20 cm para arrematar. Use o <a href="http://www.knitty.com/ISSUEsummer04/FEATtheresasum04.html" target="_blank">Kitchener stitch</a> para arrematar.</p>
+
+                        <p>
+                    </div><!---#cuff-down-recipe-->
+            </div><!---#recipe-->
+        </div><!---#calculator-->
+        <hr />
+        <!--<h3>Posts about Crafting from the Author's Blog</h3>
+            <div id="crafting-posts" class="row"  ng-controller="CraftingPosts" ng-cloak>
+                <div class="crafting-post col-md-3" ng-repeat="craftingPost in craftingPosts">
+                    <a class="img-link" href="{{craftingPost.link}}" target="_blank"><img src="{{craftingPost._embedded['wp:featuredmedia'][0].media_details.sizes.thumbnail.source_url}}" alt="{{craftingPost._embedded['wp:featuredmedia'][0].alt_text}}"/></a>
+                    <div class="row post-info">
+                        <span class="col-md-5 posted-date">{{craftingPost.date | date}}</span>
+                        <a class="col-md-7 post-link" href="{{craftingPost.link}}" target="_blank">{{craftingPost.title.rendered}} &raquo;</a>
+                    </div>
+                </div>
+            </div>
+
+            <hr />-->
+        <footer>Contact <a href="http://rachelleggett.com" target="_blank">Rachel Leggett</a> with feedback or feature requests, or <a href="https://github.com/rmleg/sock-knitters-notebook" target="_blank">fork this project on GitHub</a>. | <a href="#">Back to Top &uarr;</a><br>
+            <p>Essa receita de meia foi disponibilizada de graça por <a href="http://arbortwist.com" target="_blank">Arbor Twist</a>.</p></footer>
+        </div><!---#container-->
+
+            <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+            <!-- Include all compiled plugins (below), or include individual files as needed -->
+            <script src="js/bootstrap.min.js"></script>
+            <script src="js/app.js"></script>
+            <script src="js/filters.js"></script>
+            <script src="view1/view1.js"></script>
+            <script src="view2/view2.js"></script>
+            <script src="components/version/version.js"></script>
+            <script src="components/version/version-directive.js"></script>
+            <script src="components/version/interpolate-filter.js"></script>
+
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		  ga('create', 'UA-76871949-2', 'auto');
+		  ga('send', 'pageview');
+
+		</script>
+
+        </body>
 </html>
